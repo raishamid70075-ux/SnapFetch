@@ -7,6 +7,12 @@ import yt_dlp, os, re, uuid, glob, urllib.request
 app = FastAPI()
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
 
+
+@app.get("/")
+def root():
+    return {"ok": True}
+
+
 IMAGE_EXTS = {"jpg", "jpeg", "png", "webp"}
 UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
 MEDIA_TYPES = {"jpg": "image/jpeg", "jpeg": "image/jpeg", "png": "image/png",
