@@ -3,5 +3,6 @@ __pycache__/
 backend/temp/
 backend/cookies.txt
 backend/cookiestiktok.txt
+backend/.env
 *.log
 *.err
