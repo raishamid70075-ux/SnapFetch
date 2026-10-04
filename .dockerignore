@@ -1,0 +1,13 @@
+.git
+.venv
+.vscode
+frontend
+backend/temp
+backend/cookies.txt
+backend/cookiestiktok.txt
+backend/.env
+**/__pycache__
+*.mp4
+*.webm
+*.log
+*.err
