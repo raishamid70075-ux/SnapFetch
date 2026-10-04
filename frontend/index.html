@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="dark">
+    <meta name="theme-color" content="#0a0a0b">
+    <title>SnapFetch — Unduh video, foto &amp; carousel</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-platform="youtube">
+
+    <main class="shell">
+        <header class="head">
+            <h1>SnapFetch</h1>
+            <p>Unduh video, foto, dan carousel dari YouTube, TikTok, dan Instagram.</p>
+        </header>
+
+        <div class="tabs" role="group" aria-label="Pilih platform">
+            <button type="button" id="tab-youtube" class="tab-btn" data-platform="youtube" aria-pressed="true">
+                <i class="fa-brands fa-youtube" aria-hidden="true"></i> YouTube
+            </button>
+            <button type="button" id="tab-tiktok" class="tab-btn" data-platform="tiktok" aria-pressed="false">
+                <i class="fa-brands fa-tiktok" aria-hidden="true"></i> TikTok
+            </button>
+            <button type="button" id="tab-instagram" class="tab-btn" data-platform="instagram" aria-pressed="false">
+                <i class="fa-brands fa-instagram" aria-hidden="true"></i> Instagram
+            </button>
+        </div>
+
+        <form class="row" id="fetchForm" novalidate>
+            <div class="field">
+                <span id="input-icon" class="ico" aria-hidden="true"><i class="fa-brands fa-youtube"></i></span>
+                <input type="url" id="videoUrl" autocomplete="off" spellcheck="false"
+                    placeholder="Tempel link video YouTube di sini..."
+                    aria-label="Tautan media">
+                <button type="button" id="clearBtn" aria-label="Hapus tautan" class="clear hidden">
+                    <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+                </button>
+            </div>
+            <button type="submit" id="btnFetch" class="btn btn-primary">
+                <i class="fa-solid fa-arrow-down" aria-hidden="true"></i> Ambil
+            </button>
+        </form>
+
+        <fieldset id="methodContainer" class="methods">
+            <legend>Metode proses</legend>
+            <div class="opts">
+                <label class="opt">
+                    <input type="radio" name="processMethod" value="ytdlp">
+                    <span>
+                        <span class="t">Cepat</span>
+                        <span class="d">Hasil langsung, bisa tanpa suara.</span>
+                    </span>
+                </label>
+                <label class="opt">
+                    <input type="radio" name="processMethod" value="ffmpeg" checked>
+                    <span>
+                        <span class="t">Lengkap</span>
+                        <span class="d">Gabung video + audio, dukung MP3.</span>
+                    </span>
+                </label>
+            </div>
+        </fieldset>
+
+        <div id="loading" class="loading hidden">
+            <div class="spin" aria-hidden="true"></div>
+            <p>Mengekstrak media…</p>
+        </div>
+
+        <section id="resultCard" class="panel hidden" aria-live="polite">
+            <div class="result">
+                <div class="thumb">
+                    <img id="videoThumbnail" src="" alt="">
+                    <span id="videoDuration" class="badge">00:00</span>
+                </div>
+                <div class="result-body">
+                    <div>
+                        <h2 id="videoTitle" class="title">Judul Video</h2>
+                        <p id="videoSource" class="meta">Platform: YouTube</p>
+                    </div>
+                    <div class="result-actions">
+                        <label class="sr-only" for="formatSelect">Format</label>
+                        <select id="formatSelect"></select>
+                        <a id="btnDownload" href="#" class="btn btn-primary" download>
+                            <i class="fa-solid fa-arrow-down" aria-hidden="true"></i> Unduh
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <p id="audioWarning" class="notice hidden">
+                <i class="fa-solid fa-circle-info" aria-hidden="true"></i> Format ini hanya berisi video, tanpa suara.
+            </p>
+        </section>
+
+        <section id="carouselResultCard" class="panel hidden" aria-live="polite">
+            <h2 id="carouselTitle" class="title">Judul</h2>
+
+            <div class="stage">
+                <img id="carouselImage" src="" alt="Slide">
+                <button type="button" id="carouselPrev" class="nav prev" aria-label="Slide sebelumnya">
+                    <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
+                </button>
+                <button type="button" id="carouselNext" class="nav next" aria-label="Slide berikutnya">
+                    <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                </button>
+                <div id="carouselDots" class="dots"></div>
+            </div>
+
+            <div class="stack">
+                <a id="btnDownloadSlide" href="#" class="btn btn-primary" download>
+                    <i class="fa-solid fa-arrow-down" aria-hidden="true"></i> Unduh slide ini
+                </a>
+                <a id="btnDownloadCarouselVideo" href="#" class="btn btn-ghost hidden" download>Unduh sebagai video</a>
+                <a id="btnDownloadCarouselMp3" href="#" class="btn btn-ghost" download>Unduh MP3</a>
+            </div>
+        </section>
+    </main>
+
+    <script src="js/main.js"></script>
+</body>
+</html>

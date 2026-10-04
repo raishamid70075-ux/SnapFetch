@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+backend/temp/
+backend/cookies.txt
+backend/cookiestiktok.txt
+*.log
+*.err
