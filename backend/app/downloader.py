@@ -79,6 +79,16 @@ def _extract_tiktok_carousel(ydl, info: dict | None, url: str):
     return _carousel_from_item(item) if item else None
 
 
+def _rank(f: dict) -> tuple:
+    # Default anjuran: mp4 dulu, resolusi paling dekat 720p, yang sudah bawa audio
+    h = f.get("height") or 0
+    return (
+        0 if f.get("ext") == "mp4" else 1,
+        abs(h - 720),
+        0 if f.get("has_audio") == "true" else 1,
+    )
+
+
 def extract_video_details(video_url: str, method: str = "ffmpeg", cookie_path: str | None = None):
     # Cek file cookies otomatis (TikTok pakai cookiestiktok.txt)
     if not cookie_path:
@@ -196,9 +206,12 @@ def extract_video_details(video_url: str, method: str = "ffmpeg", cookie_path: s
                     "format_id": fmt.get("format_id"),
                     "url": fmt.get("url"),
                     "ext": fmt.get("ext", "mp4"),
+                    "height": fmt.get("height"),
                     "label": label,
                     "has_audio": has_audio
                 })
+
+        available_formats.sort(key=_rank)
 
         return {
             "status": "success",
@@ -242,4 +255,16 @@ if __name__ == "__main__":
     assert _ig_media({"thumbnails": [{"url": "https://c/s.jpg"}]}) == ("https://c/s.jpg", "jpg")
     assert _ig_media({"thumbnail": "https://c/t.jpg"}) == ("https://c/t.jpg", "jpg")
     assert _ig_media({}) == ("", "jpg")
+    # Urutan anjuran: mp4 720 bawa audio → mp4 720 video-only → mp4 1080 → webm → m4a
+    ranked = sorted([
+        {"ext": "m4a", "height": None, "has_audio": "true"},
+        {"ext": "webm", "height": 1080, "has_audio": "false"},
+        {"ext": "mp4", "height": 1080, "has_audio": "true"},
+        {"ext": "mp4", "height": 720, "has_audio": "false"},
+        {"ext": "mp4", "height": 720, "has_audio": "true"},
+    ], key=_rank)
+    assert [(f["ext"], f["height"], f["has_audio"]) for f in ranked] == [
+        ("mp4", 720, "true"), ("mp4", 720, "false"),
+        ("mp4", 1080, "true"), ("webm", 1080, "false"), ("m4a", None, "true"),
+    ], ranked
     print("ok")
